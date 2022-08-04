@@ -6,21 +6,15 @@ namespace BattleshipTests;
 public class GameTests
 {
     [Test]
-    public void Create_game()
-    {
-        new Game();
-    }
-
-    [Test]
     public void Attack_position()
     {
-        new Game().Attack(new Position('A', 5));
+        new Game(new IShip[] { new SinglePositionShip("ship1", new Position('A', 4)) }).Attack(new Position('A', 5));
     }
 
     [Test]
     public void Attack_same_position_twice_should_throw()
     {
-        var sut = new Game();
+        var sut = new Game(new IShip[] { new SinglePositionShip("ship1", new Position('A', 4)) });
         sut.Attack(new Position('A', 5));
         Should.Throw<ArgumentException>(() => sut.Attack(new Position('A', 5)))
             .Message.ShouldBe("Position 'A5' already attacked.");
@@ -67,6 +61,22 @@ public class GameTests
     }
     
     [Test]
+    public void End_game_with_two_ships()
+    {
+        var sut = new Game(new IShip[]
+        {
+            new SinglePositionShip("ship1", new Position('A', 1)),
+            new SinglePositionShip("ship1", new Position('B', 2)),
+        });
+        sut.Attack(new Position('A', 1));
+        sut.Attack(new Position('B', 2));
+
+        var actual = sut.InProgress;
+        
+        actual.ShouldBe(false);
+    }
+    
+    [Test]
     public void End_game()
     {
         var sut = new Game(new IShip[] { new SinglePositionShip("ship1", new Position('A', 1))});
@@ -75,6 +85,15 @@ public class GameTests
         var actual = sut.InProgress;
         
         actual.ShouldBe(false);
+    }
+    
+    [Test]
+    public void Attack_when_game_ened()
+    {
+        var sut = new Game(new IShip[] { new SinglePositionShip("ship1", new Position('A', 1))});
+        sut.Attack(new Position('A', 1));
+        Should.Throw<ArgumentException>(() => sut.Attack(new Position('A', 1)))
+            .Message.ShouldBe("Game is over.");
     }
 }
 
@@ -146,6 +165,8 @@ public class Game
 
     public AttackOutcome Attack(Position position)
     {
+        if(!InProgress) throw new ArgumentException("Game is over.");
+        
         if (_playerAttacks.Contains(position))
         {
             throw new ArgumentException($"Position '{position}' already attacked.");
