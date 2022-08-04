@@ -8,13 +8,13 @@ public class GameTests
     [Test]
     public void Attack_position()
     {
-        new Game(new IShip[] { new SinglePositionShip("ship1", new Position('A', 4)) }).Attack(new Position('A', 5));
+        new Game(new Ship[] { new SinglePositionShip("ship1", new Position('A', 4)) }).Attack(new Position('A', 5));
     }
 
     [Test]
     public void Attack_same_position_twice_should_throw()
     {
-        var sut = new Game(new IShip[] { new SinglePositionShip("ship1", new Position('A', 4)) });
+        var sut = new Game(new Ship[] { new SinglePositionShip("ship1", new Position('A', 4)) });
         sut.Attack(new Position('A', 5));
         Should.Throw<ArgumentException>(() => sut.Attack(new Position('A', 5)))
             .Message.ShouldBe("Position 'A5' already attacked.");
@@ -37,7 +37,7 @@ public class GameTests
     [Test]
     public void Attack_single_position_ship_should_sink_it()
     {
-        var actual = new Game(new IShip[] { new SinglePositionShip("ship1", new Position('A', 1))}).Attack(new Position('A', 1));
+        var actual = new Game(new Ship[] { new SinglePositionShip("ship1", new Position('A', 1))}).Attack(new Position('A', 1));
         
         actual.ShouldBe(new AttackOutcome("ship1", AttackResult.Sunk));
     }
@@ -45,7 +45,7 @@ public class GameTests
     [Test]
     public void Attack_single_position_ship_should_miss()
     {
-        var actual = new Game(new IShip[] { new SinglePositionShip("ship1", new Position('B', 1))}).Attack(new Position('A', 1));
+        var actual = new Game(new Ship[] { new SinglePositionShip("ship1", new Position('B', 1))}).Attack(new Position('A', 1));
         
         actual.ShouldBe(new AttackOutcome(AttackResult.Miss));
     }
@@ -53,7 +53,7 @@ public class GameTests
     [Test]
     public void Missed_attack_doesnt_end_game()
     {
-        var sut = new Game(new IShip[] { new SinglePositionShip("ship1", new Position('B', 1))});
+        var sut = new Game(new Ship[] { new SinglePositionShip("ship1", new Position('B', 1))});
         sut.Attack(new Position('A', 1));
         var actual = sut.InProgress;
         
@@ -63,7 +63,7 @@ public class GameTests
     [Test]
     public void End_game_with_two_ships()
     {
-        var sut = new Game(new IShip[]
+        var sut = new Game(new Ship[]
         {
             new SinglePositionShip("ship1", new Position('A', 1)),
             new SinglePositionShip("ship1", new Position('B', 2)),
@@ -79,7 +79,7 @@ public class GameTests
     [Test]
     public void End_game()
     {
-        var sut = new Game(new IShip[] { new SinglePositionShip("ship1", new Position('A', 1))});
+        var sut = new Game(new Ship[] { new SinglePositionShip("ship1", new Position('A', 1))});
         sut.Attack(new Position('A', 1));
 
         var actual = sut.InProgress;
@@ -88,12 +88,24 @@ public class GameTests
     }
     
     [Test]
-    public void Attack_when_game_ened()
+    public void Attack_when_game_end()
     {
-        var sut = new Game(new IShip[] { new SinglePositionShip("ship1", new Position('A', 1))});
+        var sut = new Game(new Ship[] { new SinglePositionShip("ship1", new Position('A', 1))});
         sut.Attack(new Position('A', 1));
         Should.Throw<ArgumentException>(() => sut.Attack(new Position('A', 1)))
             .Message.ShouldBe("Game is over.");
+    }
+    
+    [Test]
+    public void Cant_create_game_with_overlapping_ships()
+    {
+        var invalidShips = new Ship[]
+        {
+            new SinglePositionShip("ship1", new Position('A', 1)),
+            new SinglePositionShip("ship2", new Position('A', 1))
+        };
+        Should.Throw<ArgumentException>(() => new Game(invalidShips))
+            .Message.ShouldBe("Couple of ships occupy same position.");
     }
 }
 
@@ -149,15 +161,21 @@ public class Position : IEquatable<Position>
 
 public class Game
 {
-    private IShip[] _ships;
+    private Ship[] _ships;
     private HashSet<Position> _playerAttacks = new();
 
-    public Game() : this(Array.Empty<IShip>())
+    public Game() : this(Array.Empty<Ship>())
     {
     }
     
-    public Game(IShip[] ships)
+    public Game(Ship[] ships)
     {
+        var invalidPositions = ships.SelectMany(x => x.Positions).GroupBy(x => x).Where(x => x.Count() > 1);
+        if (invalidPositions.Count() > 0)
+        {
+            throw new ArgumentException("Couple of ships occupy same position.");
+        }
+        
         _ships = ships;
     }
 
@@ -181,29 +199,12 @@ public class Game
     }
 }
 
-public interface IShip
+public abstract class Ship : IEquatable<Ship>
 {
+    public IReadOnlyList<Position> Positions { get; }
     public string Name { get; }
-    public ShipStatus Status { get; }
-    bool Match(Position position);
-    ShipStatus Attack(Position position);
-}
-
-public class SinglePositionShip : IShip
-{
-    public string Name { get; }
-    public Position Position { get; }
     public ShipStatus Status { get; private set; }
-
-    public SinglePositionShip(string name, Position position)
-    {
-        Name = name;
-        Position = position;
-        Status = ShipStatus.Alive;
-    }
-
-    public bool Match(Position position)
-        => Position == position;
+    public bool Match(Position position) => Positions.Contains(position);
 
     public ShipStatus Attack(Position position)
     {
@@ -213,6 +214,51 @@ public class SinglePositionShip : IShip
         }
 
         return Status;
+    }
+
+    public Ship(string name, Position[] positions)
+    {
+        Positions = positions;
+        Name = name;
+        Status = ShipStatus.Alive;
+    }
+
+    public bool Equals(Ship? other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return Positions.SequenceEqual(other.Positions) && Name == other.Name && Status == other.Status;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((Ship)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Positions, Name, (int)Status);
+    }
+
+    public static bool operator ==(Ship? left, Ship? right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(Ship? left, Ship? right)
+    {
+        return !Equals(left, right);
+    }
+}
+
+public class SinglePositionShip : Ship
+{
+    public SinglePositionShip(string name, Position position) : base(name, new Position[] { position })
+    {
+        
     }
 }
 
