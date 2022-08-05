@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using BattleshipGame.Games;
 using NUnit.Framework;
 using Shouldly;
 
@@ -114,6 +115,6 @@ public class GameTests
     {
         var actual = Game.Create().Ships.Select(x => x.GetType());
 
-        actual.ShouldBe(new[] { typeof(Battleship), typeof(Destroyer), typeof(Destroyer) });
+        actual.ShouldBe(new[] { typeof(BattleshipGame.Games.Battleship), typeof(Destroyer), typeof(Destroyer) });
     }
 }

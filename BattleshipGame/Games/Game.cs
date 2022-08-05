@@ -1,4 +1,4 @@
-namespace BattleshipTests;
+namespace BattleshipGame.Games;
 
 public class Game
 {
@@ -50,7 +50,7 @@ public class Game
             var randomAlignment = RandomAlignment();
             try
             {
-                created = game.TryAddShip(new Battleship("Battleship", randomPosition, randomAlignment)).Item1;
+                created = game.TryAddShip(new global::BattleshipGame.Games.Battleship("Battleship", randomPosition, randomAlignment)).Item1;
             }
             catch (Exception e)
             {

@@ -1,3 +1,5 @@
+using BattleshipGame.Games;
+
 namespace BattleshipTests;
 
 public class SinglePositionShip : Ship

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace BattleshipTests;
+﻿namespace BattleshipGame.Games;
 
 public abstract class Ship : IEquatable<Ship>
 {

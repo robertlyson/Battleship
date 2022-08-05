@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using BattleshipGame.Games;
+using NUnit.Framework;
 using Shouldly;
 
 namespace BattleshipTests;

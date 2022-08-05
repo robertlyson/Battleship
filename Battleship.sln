@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleship", "Battleship\Battleship.csproj", "{DBC318FB-B33C-4F99-B2BB-2C82BB9E1F8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleshipGame", "BattleshipGame\BattleshipGame.csproj", "{DBC318FB-B33C-4F99-B2BB-2C82BB9E1F8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleshipTests", "BattleshipTests\BattleshipTests.csproj", "{9B6E5032-8B20-4EAA-B50B-BD91A6B5F270}"
 EndProject

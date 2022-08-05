@@ -1,4 +1,4 @@
-namespace BattleshipTests;
+namespace BattleshipGame.Games;
 
 public enum ShipStatus
 {

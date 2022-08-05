@@ -1,3 +1,4 @@
+using BattleshipGame.Games;
 using NUnit.Framework;
 using Shouldly;
 

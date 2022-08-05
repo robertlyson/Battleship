@@ -1,4 +1,4 @@
-namespace BattleshipTests;
+namespace BattleshipGame.Games;
 
 public class Position : IEquatable<Position>
 {
