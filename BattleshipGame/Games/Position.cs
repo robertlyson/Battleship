@@ -18,8 +18,8 @@ public class Position : IEquatable<Position>
 
     public static Position RandomPosition()
     {
-        var column = (char)_random.Next(AvailableColumns.First(), AvailableColumns.Last());
-        var row = (ushort)_random.Next(AvailableRows.First(), AvailableRows.Last());
+        var column = (char)_random.Next(AvailableColumns.First(), AvailableColumns.Last() + 1);
+        var row = (ushort)_random.Next(AvailableRows.First(), AvailableRows.Last() + 1);
 
         var randomPosition = new Position(column, row);
         return randomPosition;

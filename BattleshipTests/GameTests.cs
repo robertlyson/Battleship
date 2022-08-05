@@ -115,6 +115,14 @@ public class GameTests
     {
         var actual = Game.Create().Ships.Select(x => x.GetType());
 
-        actual.ShouldBe(new[] { typeof(BattleshipGame.Games.Battleship), typeof(Destroyer), typeof(Destroyer) });
+        actual.ShouldBe(new[] { typeof(Battleship), typeof(Destroyer), typeof(Destroyer) });
+    }
+
+    [Test]
+    public void Game_contains_ships_with_both_alignments()
+    {
+        var actual = Game.Create().Ships.Select(x => x.Alignment).Distinct().OrderBy(x => x);
+
+        actual.ShouldBe(new[] { ShipAlignment.Horizontal, ShipAlignment.Vertical });
     }
 }

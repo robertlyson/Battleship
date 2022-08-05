@@ -2,20 +2,16 @@
 
 public abstract class Ship : IEquatable<Ship>
 {
+    private HashSet<Position> _hits = new();
     public IReadOnlyList<Position> Positions { get; }
     public string Name { get; }
+    public ShipAlignment Alignment { get; }
     public ShipStatus Status { get; private set; }
-
-    private Ship(string name, Position[] positions)
-    {
-        Positions = positions;
-        Name = name;
-        Status = ShipStatus.Alive;
-    }
 
     protected Ship(string name, Position startPosition, ShipAlignment alignment, int size)
     {
         Name = name;
+        Alignment = alignment;
         Status = ShipStatus.Alive;
         Positions = GeneratePositions(startPosition, alignment, size).ToArray();
     }
@@ -45,7 +41,14 @@ public abstract class Ship : IEquatable<Ship>
 
     public ShipStatus Attack(Position position)
     {
+        if (Status == ShipStatus.Sunk) return Status;
+        
         if (Match(position))
+        {
+            _hits.Add(position);
+        }
+
+        if (_hits.Count == Positions.Count)
         {
             Status = ShipStatus.Sunk;
         }

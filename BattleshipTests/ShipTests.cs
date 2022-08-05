@@ -65,4 +65,15 @@ public class ShipTests
         Should.Throw<ArgumentException>(() => new Battleship("destroyer", new Position('H', 1), ShipAlignment.Horizontal))
             .Message.ShouldBe("Invalid column, must be A-J.");
     }
+
+    [Test]
+    public void Attack_ship_till_its_sunk_should_result_in_correct_statuses()
+    {
+        var sut = new Battleship("destroyer", new Position('A', 1), ShipAlignment.Horizontal);
+
+        var actual = sut.Positions.Select(x => sut.Attack(x)).ToArray();
+
+        actual.ShouldBe(new[]
+            { ShipStatus.Alive, ShipStatus.Alive, ShipStatus.Alive, ShipStatus.Alive, ShipStatus.Sunk });
+    }
 }

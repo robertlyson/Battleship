@@ -37,7 +37,9 @@ public class Game
         if (ship == null) return new AttackOutcome(AttackResult.Miss);
         var shipStatus = ship.Attack(position);
 
-        return shipStatus == ShipStatus.Sunk ? new AttackOutcome(ship.Name, AttackResult.Sunk) : new AttackOutcome(AttackResult.Hit);
+        return shipStatus == ShipStatus.Sunk
+            ? new AttackOutcome(ship.Name, AttackResult.Sunk)
+            : new AttackOutcome(ship.Name, AttackResult.Hit);
     }
 
     public static Game Create()
@@ -95,7 +97,7 @@ public class Game
 
     private static ShipAlignment RandomAlignment()
     {
-        return _random.Next(0, 1) == 0 ? ShipAlignment.Horizontal : ShipAlignment.Vertical;
+        return _random.Next(0, 2) == 0 ? ShipAlignment.Horizontal : ShipAlignment.Vertical;
     }
 
     private (bool, ErrorDetails?) TryAddShip(Ship ship)
