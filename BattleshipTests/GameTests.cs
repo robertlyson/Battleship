@@ -109,6 +109,69 @@ public class GameTests
     }
 }
 
+public class ShipTests
+{
+    [Test]
+    public void Create_horizontal_destroyer_should_success()
+    {
+        var actual = new Destroyer("destroyer", new Position('A', 1), ShipAlignment.Horizontal);
+        actual.Positions.ShouldBe(new[]
+            { new Position('A', 1), new Position('B', 1), new Position('C', 1), new Position('D', 1) });
+    }
+
+    [Test]
+    public void Create_vertical_destroyer_should_success()
+    {
+        var actual = new Destroyer("destroyer", new Position('A', 1), ShipAlignment.Vertical);
+        actual.Positions.ShouldBe(new[]
+            { new Position('A', 1), new Position('A', 2), new Position('A', 3), new Position('A', 4) });
+    }
+
+    [Test]
+    public void Create_invalid_vertical_destroyer_should_fail()
+    {
+        Should.Throw<ArgumentException>(() => new Destroyer("destroyer", new Position('A', 8), ShipAlignment.Vertical))
+            .Message.ShouldBe("Invalid row, must be 1-10.");
+    }
+
+    [Test]
+    public void Create_invalid_horizontal_destroyer_should_fail()
+    {
+        Should.Throw<ArgumentException>(() => new Battleship("destroyer", new Position('H', 1), ShipAlignment.Horizontal))
+            .Message.ShouldBe("Invalid column, must be A-J.");
+    }
+    
+    [Test]
+    public void Create_horizontal_battleship_should_success()
+    {
+        var actual = new Battleship("destroyer", new Position('A', 1), ShipAlignment.Horizontal);
+        actual.Positions.ShouldBe(new[]
+            { new Position('A', 1), new Position('B', 1), new Position('C', 1), new Position('D', 1), new Position('E', 1) });
+    }
+
+    [Test]
+    public void Create_vertical_battleship_should_success()
+    {
+        var actual = new Battleship("destroyer", new Position('A', 1), ShipAlignment.Vertical);
+        actual.Positions.ShouldBe(new[]
+            { new Position('A', 1), new Position('A', 2), new Position('A', 3), new Position('A', 4), new Position('A', 5) });
+    }
+
+    [Test]
+    public void Create_invalid_vertical_battleship_should_fail()
+    {
+        Should.Throw<ArgumentException>(() => new Battleship("destroyer", new Position('A', 8), ShipAlignment.Vertical))
+            .Message.ShouldBe("Invalid row, must be 1-10.");
+    }
+
+    [Test]
+    public void Create_invalid_horizontal_battleship_should_fail()
+    {
+        Should.Throw<ArgumentException>(() => new Battleship("destroyer", new Position('H', 1), ShipAlignment.Horizontal))
+            .Message.ShouldBe("Invalid column, must be A-J.");
+    }
+}
+
 public class Position : IEquatable<Position>
 {
     public char Column { get; }
@@ -142,7 +205,6 @@ public class Position : IEquatable<Position>
     {
         return HashCode.Combine(Column, Row);
     }
-
     public static bool operator ==(Position? left, Position? right)
     {
         return Equals(left, right);
@@ -156,6 +218,16 @@ public class Position : IEquatable<Position>
     public override string ToString()
     {
         return $"{Column}{Row}";
+    }
+
+    public Position MoveByOneRow()
+    {
+        return new Position(Column, (ushort)(Row + 1));
+    }
+
+    public Position MoveByOneColumn()
+    {
+        return new Position((char)(Column + 1), Row);
     }
 }
 
@@ -171,7 +243,7 @@ public class Game
     public Game(Ship[] ships)
     {
         var invalidPositions = ships.SelectMany(x => x.Positions).GroupBy(x => x).Where(x => x.Count() > 1);
-        if (invalidPositions.Count() > 0)
+        if (invalidPositions.Any())
         {
             throw new ArgumentException("Couple of ships occupy same position.");
         }
@@ -204,6 +276,42 @@ public abstract class Ship : IEquatable<Ship>
     public IReadOnlyList<Position> Positions { get; }
     public string Name { get; }
     public ShipStatus Status { get; private set; }
+
+    private Ship(string name, Position[] positions)
+    {
+        Positions = positions;
+        Name = name;
+        Status = ShipStatus.Alive;
+    }
+
+    protected Ship(string name, Position startPosition, ShipAlignment alignment, int size)
+    {
+        Name = name;
+        Status = ShipStatus.Alive;
+        Positions = GeneratePositions(startPosition, alignment, size).ToArray();
+    }
+
+    private IEnumerable<Position> GeneratePositions(Position startPosition, ShipAlignment alignment, int size)
+    {
+        var current = startPosition;
+        yield return current;
+        if (alignment == ShipAlignment.Horizontal)
+        {
+            for (int i = 0; i < size - 1; i++)
+            {
+                current = current.MoveByOneColumn();
+                yield return current;
+            }
+            yield break;
+        }
+        
+        for (int i = 0; i < size - 1; i++)
+        {
+            current = current.MoveByOneRow();
+            yield return current;
+        }
+    }
+
     public bool Match(Position position) => Positions.Contains(position);
 
     public ShipStatus Attack(Position position)
@@ -214,13 +322,6 @@ public abstract class Ship : IEquatable<Ship>
         }
 
         return Status;
-    }
-
-    public Ship(string name, Position[] positions)
-    {
-        Positions = positions;
-        Name = name;
-        Status = ShipStatus.Alive;
     }
 
     public bool Equals(Ship? other)
@@ -256,7 +357,24 @@ public abstract class Ship : IEquatable<Ship>
 
 public class SinglePositionShip : Ship
 {
-    public SinglePositionShip(string name, Position position) : base(name, new Position[] { position })
+    public SinglePositionShip(string name, Position position) : base(name, position, ShipAlignment.Horizontal, 1)
+    {
+    }
+}
+
+public class Battleship : Ship
+{
+    public Battleship(string name, Position startPosition, ShipAlignment alignment)
+        : base(name, startPosition, alignment, 5)
+    {
+        
+    }
+}
+
+public class Destroyer : Ship
+{
+    public Destroyer(string name, Position startPosition, ShipAlignment alignment)
+        : base(name, startPosition, alignment, 4)
     {
         
     }
@@ -266,6 +384,12 @@ public enum ShipStatus
 {
     Alive,
     Sunk
+}
+
+public enum ShipAlignment
+{
+    Horizontal,
+    Vertical
 }
 
 public class AttackOutcome : IEquatable<AttackOutcome>
