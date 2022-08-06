@@ -1,4 +1,4 @@
-﻿                  BATTLESHIP                  
+                  BATTLESHIP                  
 ┌────┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
 │    │ A │ B │ C │ D │ E │ F │ G │ H │ I │ J │
 ├────┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
@@ -13,13 +13,13 @@
 │ 9  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
 │ 10 │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
 └────┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
-Attack on column(q to exit game)? abc
+General, which position (e.g. A1) to attack(q to exit game)? abc
 Invalid position
-Attack on column(q to exit game)? a-1
+General, which position (e.g. A1) to attack(q to exit game)? a-1
 Invalid position
-Attack on column(q to exit game)? Z9
+General, which position (e.g. A1) to attack(q to exit game)? Z9
 Invalid column, must be A-J.
-Attack on column(q to exit game)? B2
+General, which position (e.g. A1) to attack(q to exit game)? B2
 [2J[3J[1;1H                  BATTLESHIP                  
 ┌────┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
 │    │ A │ B │ C │ D │ E │ F │ G │ H │ I │ J │
@@ -36,7 +36,7 @@ Attack on column(q to exit game)? B2
 │ 10 │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
 └────┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
 Attack on B2 missed.
-Attack on column(q to exit game)? A1
+General, which position (e.g. A1) to attack(q to exit game)? A1
 [2J[3J[1;1H                  BATTLESHIP                  
 ┌────┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
 │    │ A │ B │ C │ D │ E │ F │ G │ H │ I │ J │

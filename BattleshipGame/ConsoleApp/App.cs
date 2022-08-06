@@ -47,7 +47,7 @@ public class App
             try
             {
                 _ansiConsole.Prompt(
-                    new TextPrompt<string>("Attack on column(q to exit game)?")
+                    new TextPrompt<string>("General, which position (e.g. A1) to attack(q to exit game)?")
                         .Validate(p =>
                         {
                             if (p == "q")
@@ -92,35 +92,39 @@ public class App
             }
             var toAttack = position;
             var attackOutcome = game.Attack(toAttack);
-            if (attackOutcome.Result == AttackResult.Hit)
-            {
-                gameMap.Data[position.Column.ToString()][position.Row-1] = "x";
-                RenderGameMap(gameMap);
-                _ansiConsole.Markup($"Attack on {toAttack} [green]hit[/] {attackOutcome.ShipName}.");
-            }
-
-            if (attackOutcome.Result == AttackResult.Miss)
-            {
-                gameMap.Data[position.Column.ToString()][position.Row-1] = "-";
-                RenderGameMap(gameMap);
-                _ansiConsole.Markup($"Attack on {toAttack} [red]missed[/].");
-            }
-
-            if (attackOutcome.Result == AttackResult.AlreadyHit)
-            {
-                _ansiConsole.Markup($"{toAttack} [red]attacked before[/].");
-            }
-
-            if (attackOutcome.Result == AttackResult.Sunk)
-            {
-                gameMap.Data[position.Column.ToString()][position.Row-1] = "x";
-                RenderGameMap(gameMap);
-                _ansiConsole.Markup($"Attack on {toAttack} [yellow]sunk[/] {attackOutcome.ShipName} ship.");
-            }
-            
+            HandleAttackOutcome(attackOutcome, gameMap, position, toAttack);
             _ansiConsole.WriteLine();
         }
         _ansiConsole.Markup("Game Over.");
+    }
+
+    private void HandleAttackOutcome(AttackOutcome attackOutcome, GameMap gameMap, Position position, Position toAttack)
+    {
+        if (attackOutcome.Result == AttackResult.Hit)
+        {
+            gameMap.Data[position.Column.ToString()][position.Row - 1] = "[green]x[/]";
+            RenderGameMap(gameMap);
+            _ansiConsole.Markup($"Attack on {toAttack} [green]hit[/] {attackOutcome.ShipName}.");
+        }
+
+        if (attackOutcome.Result == AttackResult.Miss)
+        {
+            gameMap.Data[position.Column.ToString()][position.Row - 1] = "[red]-[/]";
+            RenderGameMap(gameMap);
+            _ansiConsole.Markup($"Attack on {toAttack} [red]missed[/].");
+        }
+
+        if (attackOutcome.Result == AttackResult.AlreadyHit)
+        {
+            _ansiConsole.Markup($"{toAttack} [red]attacked before[/].");
+        }
+
+        if (attackOutcome.Result == AttackResult.Sunk)
+        {
+            gameMap.Data[position.Column.ToString()][position.Row - 1] = "[green]x[/]";
+            RenderGameMap(gameMap);
+            _ansiConsole.Markup($"Attack on {toAttack} [yellow]sunk[/] {attackOutcome.ShipName} ship.");
+        }
     }
 
     private static GameMap CreateGameMap()
