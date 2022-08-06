@@ -1,3 +1,4 @@
+using BattleshipGame;
 using BattleshipGame.Games;
 using Spectre.Console;
 using Spectre.Console.Rendering;
@@ -82,6 +83,7 @@ public class App
             }
             catch (Exception e)
             {
+                Logger.Error("Could not read prompt value.", e);
                 return;
             }
 

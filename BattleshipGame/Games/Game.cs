@@ -52,11 +52,11 @@ public class Game
             var randomAlignment = RandomAlignment();
             try
             {
-                created = game.TryAddShip(new global::BattleshipGame.Games.Battleship("Battleship", randomPosition, randomAlignment)).Item1;
+                created = game.TryAddShip(new Battleship("Battleship", randomPosition, randomAlignment)).Success;
             }
             catch (Exception e)
             {
-                // ignored
+                Logger.Error("Could not generate Battleship, retrying.", e);
             }
         }
         
@@ -68,11 +68,11 @@ public class Game
             try
             {
                 var destroyer = new Destroyer("Destroyer", randomPosition, randomAlignment);
-                created = game.TryAddShip(destroyer).Item1;
+                created = game.TryAddShip(destroyer).Success;
             }
             catch (Exception e)
             {
-                // ignored
+                Logger.Error("Could not generate Destroyer, retrying.", e);
             }
         }
         
@@ -84,11 +84,11 @@ public class Game
             try
             {
                 var destroyer = new Destroyer("Destroyer", randomPosition, randomAlignment);
-                created = game.TryAddShip(destroyer).Item1;
+                created = game.TryAddShip(destroyer).Success;
             }
             catch (Exception e)
             {
-                // ignored
+                Logger.Error("Could not generate Destroyer, retrying.", e);
             }
         }
 
@@ -100,7 +100,7 @@ public class Game
         return _random.Next(0, 2) == 0 ? ShipAlignment.Horizontal : ShipAlignment.Vertical;
     }
 
-    private (bool, ErrorDetails?) TryAddShip(Ship ship)
+    private (bool Success, ErrorDetails? details) TryAddShip(Ship ship)
     {
         var invalidPositions = _ships.Where(x => x.Overlap(ship));
         if (invalidPositions.Any())
