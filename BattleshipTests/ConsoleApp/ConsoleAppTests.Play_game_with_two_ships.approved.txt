@@ -1,0 +1,50 @@
+﻿                  BATTLESHIP                  
+┌────┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+│    │ A │ B │ C │ D │ E │ F │ G │ H │ I │ J │
+├────┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+│ 1  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 2  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 3  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 4  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 5  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 6  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 7  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 8  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 9  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 10 │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+└────┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+Attack on column(q to exit game)? A1
+[2J[3J[1;1H                  BATTLESHIP                  
+┌────┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+│    │ A │ B │ C │ D │ E │ F │ G │ H │ I │ J │
+├────┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+│ 1  │ x │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 2  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 3  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 4  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 5  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 6  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 7  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 8  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 9  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 10 │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+└────┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+Attack on A1 sunk Foo ship.
+Attack on column(q to exit game)? J10
+[2J[3J[1;1H                  BATTLESHIP                  
+┌────┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+│    │ A │ B │ C │ D │ E │ F │ G │ H │ I │ J │
+├────┼───┼───┼───┼───┼───┼───┼───┼───┼───┼───┤
+│ 1  │ x │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 2  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 3  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 4  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 5  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 6  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 7  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 8  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 9  │ o │ o │ o │ o │ o │ o │ o │ o │ o │ o │
+│ 10 │ o │ o │ o │ o │ o │ o │ o │ o │ o │ x │
+└────┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+Attack on J10 sunk Bar ship.
+Game Over.
