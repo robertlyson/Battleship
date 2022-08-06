@@ -1,5 +1,6 @@
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using BattleshipGame.ConsoleApp;
 using BattleshipGame.Games;
 using NUnit.Framework;
 using Shouldly;
