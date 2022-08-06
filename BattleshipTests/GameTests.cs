@@ -121,8 +121,15 @@ public class GameTests
     [Test]
     public void Game_contains_ships_with_both_alignments()
     {
-        var actual = Game.Create().Ships.Select(x => x.Alignment).Distinct().OrderBy(x => x);
+        var actual = new HashSet<ShipAlignment>();
+        for (int i = 0; i < 5; i++)
+        {
+            foreach (var shipAlignment in Game.Create().Ships.Select(x => x.Alignment).Distinct())
+            {
+                actual.Add(shipAlignment);
+            }
+        }
 
-        actual.ShouldBe(new[] { ShipAlignment.Horizontal, ShipAlignment.Vertical });
+        actual.OrderBy(x => x).ShouldBe(new[] { ShipAlignment.Horizontal, ShipAlignment.Vertical });
     }
 }
