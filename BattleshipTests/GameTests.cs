@@ -8,12 +8,6 @@ namespace BattleshipTests;
 public class GameTests
 {
     [Test]
-    public void Attack_position()
-    {
-        new Game(new Ship[] { new SinglePositionShip("ship1", new Position('A', 4)) }).Attack(new Position('A', 5));
-    }
-
-    [Test]
     public void Attack_same_position_twice_should_return_already_attacked()
     {
         var sut = new Game(new Ship[] { new SinglePositionShip("ship1", new Position('A', 4)) });
